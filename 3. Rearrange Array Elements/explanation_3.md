@@ -1,0 +1,6 @@
+# Problem 3: Rearrange Array Digits  
+
+
+This problem boils down to sorting an array of digits. The way to get the most significant sum from the input list of integers is to put the most important number in the highest digit. For a list like [1, 2, 3, 4], the solution is 42, 31 (or 41, 32) because you have placed 4 and 3 in the tens digits and 2 and 1 in the one's digits. Once the list of integers is in sorted order, the solution is a simple matter of taking the most significant digits one at a time and forming new numbers.
+
+For this problem, I use a variant of merge sort to sort the elements in reverse (most significant first) order. Then I construct numbers from the sorted digits as described above. The time complexity of this approach is O(n log n), as merge sort is an O(n log n) algorithm. Forming the digits involves a single traverse of the sorted list, thus O(n). Thus the time complexity of the entire function is also O(n log n). The space complexity of the merge sort is O(n); thus, the overall space complexity is also O(n).
