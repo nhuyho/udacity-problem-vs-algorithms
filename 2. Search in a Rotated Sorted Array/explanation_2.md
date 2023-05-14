@@ -1,6 +1,4 @@
-# Problem 2: Search in a Rotated Sorted Array
+Problem 2
+In this problem, the sorted non-repeating search array has a rotation in a random location. The expected run time is O(log(n)). In order to achieve this, some kind of binary search is needed. 
 
-
-In order to search through a pivoted array in log(n) time, I first used binary search to find the pivoted value. Because the array is otherwise sorted, this boils down to finding the only un-sorted point, where the value one array location to the left is greater. Once the pivot is found, basic binary search can be followed to find the point using rotated array indices (rotated_index = (index + pivot_location) % array length). Because both of these operations involve only array access (a constant time operation) and two instances of binary search, the overall time complexity is still only O(log n).
-
-The call stack for each function has O(log n) steps, while storing the array in memory takes O(n) space, so the space complexity is O(n).
+We can still split the range by the midpoint. The start and end numbers of the left and right halves can be inspected to see which range (if either) contains the rotation (checking if the starting number is greater than the ending number of the range). In the range that contains the rotation, the range is valid for numbers greater than the starting number and less than the ending number. This modified binary search is continued in this manner until the number is found or -1 is returned. In terms of space complexity, there aren't any values being stored besides the search list, which is being reduced in length as the binary search continues.

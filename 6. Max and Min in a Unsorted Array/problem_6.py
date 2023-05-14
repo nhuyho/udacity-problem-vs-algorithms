@@ -1,8 +1,6 @@
-'''Problem 6: Unsorted Integer Array
-'''
+import random
 
 def get_min_max(ints):
-
     """
     Return a tuple(min, max) out of list of unsorted integers.
 
@@ -10,41 +8,41 @@ def get_min_max(ints):
        ints(list): list of integers containing one or more integers
     """
 
-    assert ints, 'Must pass a non-empty array of integers'
-    assert all(isinstance(i, int) for i in ints), 'Must pass an array of integers'
-    
-    # Set the initial min and max to the first element
+    # If empty list provided, return None
+    if len(ints) == 0:
+        return None, None
 
-    min = ints[0]
-    max = ints[0]
+    # If there is only one number in the list, then the min and max are the same
+    if len(ints) == 1:
+        return ints[0], ints[0]
 
-    # Iterate over rest of list to see if larger or smaller elements exist
+    # Initialize the minimum and maximum as the first element of the list
+    smallest = ints[0]
+    largest = ints[0]
 
-    for i in ints[1:]:
-        if min > i:
-            min = i
-        if max < i:
-            max = i
+    # Scan through each element in the array
+    for number in ints:
+        # Check if number is smaller than the smallest recorded so far
+        if number < smallest:
+            smallest = number
+        # Check if number is larger than the largest recorded so far
+        if number > largest:
+            largest = number
 
-    return min, max
+    return smallest, largest
 
 
-if __name__ == '__main__':
-    test_list_1 = [1, 4, 6, 3, 0, 5, 2]
-    test_list_2 = [1, 4, 6, 3, 0, -2, 42]
-    test_list_3 = [0, 0, 0, 0, 0, 0, 0]
+# Test cases
+# Case 1: List of random numbers (ranging from -5 to 9)
+rand_list = [i for i in range(-5, 10)]
+random.shuffle(rand_list)
+print("Pass" if ((-5, 9) == get_min_max(rand_list)) else "Fail")
 
-    # Should print 0, 6
-    print(get_min_max(test_list_1))
+# Case 2: Empty list
+print("Pass" if ((None, None) == get_min_max([])) else "Fail")
 
-    # Should print -2, 42
-    print(get_min_max(test_list_2))
+# Case 3: List with one item
+print("Pass" if ((2, 2) == get_min_max([2])) else "Fail")
 
-    # Should print 0, 0
-    print(get_min_max(test_list_3))
-
-    # Single digit, should print 1,1
-    print(get_min_max([1]))
-
-    # Should raise an error
-    print(get_min_max([]))
+# Case 4: List multiple same values
+print("Pass" if ((2, 2) == get_min_max([2, 2, 2, 2])) else "Fail")

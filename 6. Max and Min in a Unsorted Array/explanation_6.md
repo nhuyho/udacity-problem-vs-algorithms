@@ -1,4 +1,2 @@
-# Problem 6: Unsorted Integer Array  
-
-
-This problem does not require a sorted array. Rather first store the max and min as the first list element, then iterate over each list element to see if a larger or smaller part appears. This involves a single array traversal and thus is O(n) for time complexity. In addition, the algorithm consists in storing the entire list in memory for traversal, which is also O(n) in space complexity.
+Problem 6
+In this problem, the goal is to get the min and max value from an input list in O(n) time, with the additional purpose of finding the min and max in a single traversal. To do this, the first value of the list is stored as the min and the max. Then the list is linearly traversed, and each number along the list is compared against the current min and max values, which are updated as needed. The min and max values are then returned. Regarding space complexity, the intermediate min and max values are stored to compare against during the traversal.
