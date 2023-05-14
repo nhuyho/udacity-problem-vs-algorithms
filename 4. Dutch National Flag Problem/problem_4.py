@@ -7,21 +7,21 @@ def sort_012(input_list):
     """
     # Expected time complexity -> O(n)
     # Since there are only 3 possibilities for values, create 3 arrays to hold each type of digit
-    zeros = []
-    ones = []
-    twos = []
+    first = []
+    second = []
+    third = []
 
     # Linearly traverse list and organize numbers into appropriate list
     for number in input_list:
         if number == 0:
-            zeros.append(0)
+            first.append(0)
         elif number == 1:
-            ones.append(1)
+            second.append(1)
         else:
-            twos.append(2)
+            third.append(2)
 
     # Concatenate the 3 lists into final result
-    return zeros + ones + twos
+    return first + second + third
 
 
 def test_function(test_case):
