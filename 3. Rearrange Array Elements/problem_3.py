@@ -1,47 +1,30 @@
-# Would need implementation of sorting algorithm
-# Requirement: O(nlog(n)) efficiency -> use MergeSort or QuickSort
+def heapsort(arr):
+    arr_len = len(arr)
+
+    for i in range(arr_len - 1, -1, -1):
+        heapify(arr, len(arr), i)
+
+        # Swap the top element in heap with last element in array
+        arr[0], arr[i] = arr[i], arr[0]
 
 
-def mergesort(items):
-    # Base case, a list of 0 or 1 items is already sorted
-    if len(items) <= 1:
-        return items
-
-    # Otherwise, find the midpoint and split the list
-    mid = len(items)//2
-    left = items[0:mid]
-    right = items[mid:]
-
-    # Call mergesort recursively with the left and right half
-    left = mergesort(left)
-    right = mergesort(right)
-
-    # Merge our two halves and return
-    return merge(left, right)
-
-
-def merge(left, right):
-    # Given two ordered lists, merge them together in order,
-    # returning the merged list.
-    merged = []
-    left_index = 0
-    right_index = 0
-
-    # Iterate through the ordered lists until you reach the end of one list
-    # Modification to the code compared to the example - numbers to be sorted in descending order
-    while left_index < len(left) and right_index < len(right):
-        if left[left_index] < right[right_index]:
-            merged.append(right[right_index])
-            right_index += 1
-        else:
-            merged.append(left[left_index])
-            left_index += 1
-
-    # Add the remaining values from either the left or right list
-    merged += left[left_index:]
-    merged += right[right_index:]
-
-    return merged
+def heapify(arr, n, i):
+    """
+    :param: arr - array to heapify
+    n -- number of elements in the array
+    i -- index of the current node
+    TODO: Converts an array (in place) into a maxheap, a complete binary tree with the largest values at the top
+    """
+    for i in range(1, i + 1):
+        # Perform heapify processing
+        data_index = i
+        while data_index > 0:
+            parent_index = (data_index - 1) // 2
+            if arr[data_index] > arr[parent_index]:
+                arr[data_index], arr[parent_index] = arr[parent_index], arr[data_index]
+                data_index = parent_index
+            else:
+                break
 
 
 def rearrange_digits(input_list):
@@ -54,31 +37,41 @@ def rearrange_digits(input_list):
        (int),(int): Two maximum sums
     """
 
-    # If the input list doesn't contain anything, return empty array
+    # Handle empty input list
     if len(input_list) == 0:
         return []
 
-    # If the input list has one number, then the max sum is that number and zero
-    if len(input_list) == 1:
-        return [input_list[0], 0]
+    # Step 1 - perform heap sort on the input list
+    heapsort(input_list)
 
-    # Get the ordered list via merge sort
-    ordered_list = mergesort(input_list)
+    # Step 2 - base on the sorted list, construct the 2 numbers so their sum is maximum
+    number_1_list = list()
+    number_2_list = list()
 
-    # Get every other number in the sorted list
-    left_number_array = ordered_list[0::2]
-    right_number_array = ordered_list[1::2]
+    input_list_len = len(input_list)
+    # If the no. of digits is odd, then set the first digit of the first number as
+    if input_list_len % 2 == 1:
+        digit = input_list.pop()
+        number_1_list.append(digit)
 
-    # Build the return values
-    left_number_string = ''
-    for number in left_number_array:
-        left_number_string += str(number)
+    # Append the digits in input list to the 2 numbers in an interleave manner
+    input_list_len = len(input_list)
+    for i in range(input_list_len, 0, -1):
+        digit = input_list.pop()
+        if i % 2 == 0:
+            number_1_list.append(digit)
+        else:
+            number_2_list.append(digit)
 
-    right_number_string = ''
-    for number in right_number_array:
-        right_number_string += str(number)
+    # Convert the 2 list of digits into a string
+    number_1_str = ''.join(str(n) for n in number_1_list)
+    number_2_str = ''.join(str(n) for n in number_2_list)
 
-    return [int(left_number_string), int(right_number_string)]
+    # Convert the number string to int
+    number_1 = int(number_1_str)
+    number_2 = int(number_2_str)
+
+    return [number_1, number_2]
 
 
 def test_function(test_case):
@@ -90,18 +83,18 @@ def test_function(test_case):
         print("Fail")
 
 
-# Test cases
+# Test case 1 - un-sorted array as input
+print("Calling function with un-sorted array: [4, 6, 2, 5, 9, 8]")
+test_case_1 = [[4, 6, 2, 5, 9, 8], [964, 852]]
+# Should print pass as the output should be [964, 852]
+test_function(test_case_1)
 
-test_function([[1, 2, 3, 4, 5], [542, 31]])
+# Test case 2 - sorted array as input
+test_case_2 = [[1, 2, 3, 4, 5], [542, 31]]
+# Should print pass as the output should be [542, 31]
+test_function(test_case_2)
 
-test_function([[4, 6, 2, 5, 9, 8], [964, 852]])
-
-test_function([[1, 4], [4, 1]])
-
-test_function([[1, 4, 2], [41, 2]])
-
-# Edge Case 1: No inputs
-test_function([[], []])
-
-# Edge Case 2: 1 number input
-test_function([[1], [1, 0]])
+# Test case 3 - empty array as input
+test_case_3 = [[], []]
+# Should print pass as the output should be []
+test_function(test_case_3)

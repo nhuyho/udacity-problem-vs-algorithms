@@ -1,77 +1,101 @@
+# Represents a single node in the Trie
+class TrieNode:
+    def __init__(self, end_of_word=False):
+        # Initialize this node in the Trie
+
+        # Indicates whether the string ends here is a valid word
+        self.end_of_word = end_of_word
+
+        # A dictionary to store the possible characters in this node
+        # Dictionary key: character (e.g. a)
+        # Dictionary value: pointer to child node
+        self.char_dict = dict()
+
+    def insert(self, char):
+        # Add a child node in this Trie
+        sub_char_node = TrieNode()
+        self.char_dict[char] = sub_char_node
+
+        return sub_char_node
+
+    def suffixes(self, suffix=''):
+        # Recursive function that collects the suffix for
+        # all complete words below this point
+        output_str_list = list()
+
+        def find_suffix(node, output_str):
+
+            # If end_of_word at this node is true, then add the suffix to result list
+            if node.end_of_word:
+                output_str_list.append(output_str)
+
+            for char in node.char_dict:
+                temp_output_str = output_str + char
+                find_suffix(node.char_dict[char], temp_output_str)
+
+        find_suffix(self, "")
+
+        return output_str_list
+
+
+# The Trie itself containing the root node and insert/find functions
 class Trie:
     def __init__(self):
         # Initialize this Trie (add a root node)
-        self.root = TrieNode()
+        root_node = TrieNode()
+        self.root = root_node
 
     def insert(self, word):
         # Add a word to the Trie
-        parent_node = self.root
-        for character in word:
-            parent_node.insert(character)
-            parent_node = parent_node.children[character]
+
+        # Split the word into a seq of chars and build the corresponding TrieNodes
+        cur_node = self.root
+
+        for char in word:
+            if char in cur_node.char_dict:
+                cur_node = cur_node.char_dict[char]
+            else:
+                new_child_node = cur_node.insert(char)
+                cur_node = new_child_node
+
+        # End of word, set end_of_word property to True
+        cur_node.end_of_word = True
 
     def find(self, prefix):
         # Find the Trie node that represents this prefix
-        nodeToSearch = self.root
+
+        cur_node = self.root
+        # Traverse the Trie tree base on the character sequence in the prefix
         for char in prefix:
-            if char not in nodeToSearch.children:
+            if char in cur_node.char_dict:
+                cur_node = cur_node.char_dict[char]
+            else:
                 return None
-            nodeToSearch = nodeToSearch.children[char]
-        return nodeToSearch
+
+        return cur_node
+
+    def __str__(self):
+        output_str = [""]
+
+        def print_node(node, output_str):
+            output_str[0] += f"\nEnd of word: {node.end_of_word}\n"
+            for char in node.char_dict:
+                output_str[0] += f"char: {char}"
+                print_node(node.char_dict[char], output_str)
+
+        print_node(self.root, output_str)
+
+        return output_str[0]
 
 
-# Represents a single node in the Trie
-class TrieNode:
-    def __init__(self, value=''):
-        # Initialize this node in the Trie
-        self.value = value
-        self.children = {}
-    
-    def insert(self, char):
-        # Add a child node in this Trie
-        if char not in self.children:
-            self.children[char] = TrieNode(char)
-        
-    def suffixes(self, suffix=''):
-        # Recursive function that collects the suffix for 
-        # all complete words below this point
-        all_suffixes = []
-        if len(self.children) > 0:
-            for child in self.children:
-                all_suffixes += self.children[child].suffixes(suffix + child)
-            return all_suffixes
-        
-        return [suffix]
-
-
-# Populating sample data
 MyTrie = Trie()
 wordList = [
-    "ant", "anthology", "antagonist", "antonym", 
-    "fun", "function", "factory", 
+    "ant", "anthology", "antagonist", "antonym",
+    "fun", "function", "factory",
     "trie", "trigger", "trigonometry", "tripod"
 ]
 for word in wordList:
     MyTrie.insert(word)
 
-
-# Function to return results from test data
-def f(prefix):
-    if prefix != '':
-        prefixNode = MyTrie.find(prefix)
-        if prefixNode:
-            print(', '.join(prefixNode.suffixes()))
-        else:
-            print(prefix + " not found")
-    else:
-        print('')
-
-
-# Print outputs
-f('')   # Expected result: ''
-f('q')  # Expected result: "q not found"
-f('a')  # Expected result: "ntagonist, ntonym, nthology"
-f('ant')  # Expected result: "agonist, onym, hology"
-f('anto')  # Expected result: "nym"
-f('tri')  # Expected result: "gger, gonometry, e, pod"
-f('trig')  # Expected result: "ger, onometry"
+node = MyTrie.find('f')
+print(node.suffixes())
