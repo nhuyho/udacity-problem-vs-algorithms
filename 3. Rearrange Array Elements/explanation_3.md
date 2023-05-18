@@ -1,22 +1,6 @@
-# Problems vs Algorithms - Problem 3 - Rearrange Array Digits - Explanation
+# Problem 3: Rearrange Array Digits  
 
-## Logic implemented
-Firstly, heap sort was used to sort the digit array
 
-Afterwards, traverse the sorted list and construct the 2 numbers respectively:
-1. Firstly, check whether the number of elements is odd. If yes, then take the last element (which is the largest digit) as the first digit of the first number. Remove the element.
-2. Then we traverse the array from last element to the beginning. Which should be in the order of largest digit to smallest digit.
-3. For each element, we alternatively append the digit to first and second number respectively. This way will cause the max possible digit to the most significant digit of each number.
+This problem boils down to sorting an array of digits. The way to get the largest sum from the input list of digits is to put the largest number in the highest digit. That is for a list like [1, 2, 3, 4], the solution is 42, 31 (or equally 41, 32) because you have placed 4 and 3 in the tens digits, and 2 and 1 in the ones digits. Once the list of digits is in sorted order, the solution is a simple matter of taking the largest digits one at a time and forming new numbers.
 
-The sum of the result 2 numbers should be the largest possible value.
-
-## Run time complexity
-The run time complexity is the same as the Heap Sort algorithm, which is of O(nlog(n))
-
-## Space complexity
-Firstly, Heap Sort use in-place value comparison and swapping. Heap Sort is of constant space complexity.
-
-Afterwards, the construction of 2 values take a portion of the space of the input array size. 
-Afterwards, the construction of the 2 values was done by a single traversal of the array, which grows linearly as the size of input.
-
-As a result, the overall space complexity is of O(n).
+For this problem, I use a variant of merge sort to sort the elements in reverse (largest first) order. Then I construct numbers from the sorted digits as described above. The time compelxity of this approach is O(n log n) as merge sort is an O(n log n) algorithm. The process of forming the digits involves a single traverse of the sorted list and is thus O(n). Thus the time complexity of the entire function is also O(n log n). The space complexity of merge sort is O(n) thus the overall space compelxity is also O(n).
